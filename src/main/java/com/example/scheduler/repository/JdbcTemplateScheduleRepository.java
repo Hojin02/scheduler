@@ -68,6 +68,13 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return result.stream().findAny().orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Does not exitsts id = "+id));
     }
 
+    @Override
+    public int deleteSchedule(Long id, String password) {
+        System.out.println(id);
+        System.out.println(password);
+        return jdbcTemplate.update("delete from schedule where id=? and password=?", id,password);
+    }
+
     private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
         return (rs, rowNum) -> new ScheduleResponseDto(
                 rs.getLong("id"),

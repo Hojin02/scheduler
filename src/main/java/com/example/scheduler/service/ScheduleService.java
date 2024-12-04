@@ -13,4 +13,6 @@ public interface ScheduleService {
     List<ScheduleResponseDto> findSchedulesByFilters(String author, String date);
 
     ScheduleResponseDto findScheduleById(Long id);
+
+    int deleteSchedule(Long id, String password);
 }

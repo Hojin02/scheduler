@@ -44,4 +44,9 @@ public class ScheduleServiceImpl implements ScheduleService{
     public ScheduleResponseDto findScheduleById(Long id) {
         return scheduleRepository.findScheduleByIdOrElseThrow(id);
     }
+
+    @Override
+    public int deleteSchedule(Long id, String password) {
+        return scheduleRepository.deleteSchedule(id,password);
+    }
 }

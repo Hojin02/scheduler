@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 public class ScheduleServiceImpl implements ScheduleService{
 
@@ -27,5 +29,19 @@ public class ScheduleServiceImpl implements ScheduleService{
                 dto.getPassword(),
                 dto.getContents());
         return scheduleRepository.saveSchedule(schedule);
+    }
+
+    @Override
+    public List<ScheduleResponseDto> findSchedulesByFilters(String author,String date) {
+        List<ScheduleResponseDto> result = scheduleRepository.findSchedulesByFilters(author,date);
+        if(result.isEmpty()){
+           throw new ResponseStatusException(HttpStatus.NOT_FOUND,"A value that matches the search criteria is empty.");
+        }
+        return result;
+    }
+
+    @Override
+    public ScheduleResponseDto findScheduleById(Long id) {
+        return scheduleRepository.findScheduleByIdOrElseThrow(id);
     }
 }

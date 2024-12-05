@@ -45,4 +45,9 @@ public class ScheduleController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> updateAuthorAndContents(@PathVariable Long id,@RequestBody ScheduleRequestDto dto){
+        return new ResponseEntity<>(scheduleService.updateAuthorAndContents(id,dto.getPassword(),dto.getAuthor(),dto.getContents()),HttpStatus.OK);
+    }
 }

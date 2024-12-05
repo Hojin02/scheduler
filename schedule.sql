@@ -1,6 +1,7 @@
 use schedule;
 drop table user;
 drop table schedule;
+
 -- user 테이블 생성
 CREATE TABLE user
 (

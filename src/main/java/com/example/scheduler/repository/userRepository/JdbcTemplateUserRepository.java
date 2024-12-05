@@ -1,5 +1,6 @@
 package com.example.scheduler.repository.userRepository;
 
+import com.example.scheduler.dto.userDto.UserLoignRequestDto;
 import com.example.scheduler.dto.userDto.UserRequestDto;
 import com.example.scheduler.dto.userDto.UserResponseDto;
 import com.example.scheduler.entity.User;
@@ -44,7 +45,16 @@ public class JdbcTemplateUserRepository implements UserRepository{
        return null;
     }
 
-
+    @Override
+    public boolean login(UserLoignRequestDto dto) {
+        String sql = "select 1 from user where id = ? and password =? limit 1";
+        try {
+            jdbcTemplate.queryForObject(sql,Integer.class,dto.getUserId(),dto.getUserPassword());
+            return true;
+        }catch (EmptyResultDataAccessException e){
+            return false;
+        }
+    }
 
 
 }

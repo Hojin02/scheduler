@@ -1,5 +1,6 @@
 package com.example.scheduler.service.userService;
 
+import com.example.scheduler.dto.userDto.UserLoignRequestDto;
 import com.example.scheduler.dto.userDto.UserRequestDto;
 import com.example.scheduler.dto.userDto.UserResponseDto;
 import com.example.scheduler.entity.User;
@@ -27,6 +28,15 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The Email is already in use.");
         }
         return userRepository.registerUser(dto);
+    }
+
+    @Override
+    public void login(UserLoignRequestDto dto, HttpSession session) {
+        if(userRepository.login(dto)){
+            session.setAttribute("userId",dto.getUserId());
+        }else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid username or password");
+        }
     }
 
 

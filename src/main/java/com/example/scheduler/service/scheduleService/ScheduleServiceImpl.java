@@ -40,8 +40,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleResponseDto> findSchedulesByFilters(String author, String date) {
-        List<ScheduleResponseDto> result = scheduleRepository.findSchedulesByFilters(author, date);
+    public List<ScheduleResponseDto> findSchedulesByFilters(String authorId, String date) {
+        List<ScheduleResponseDto> result = scheduleRepository.findSchedulesByFilters(authorId, date);
         if (result.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "A value that matches the search criteria is " +
                     "empty.");

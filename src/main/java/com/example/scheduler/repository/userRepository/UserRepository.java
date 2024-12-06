@@ -12,4 +12,6 @@ public interface UserRepository {
     UserResponseDto  registerUser(UserRequestDto dto);
 
     boolean login(UserLoignRequestDto dto);
+
+    String getUserName(String userId);
 }

@@ -3,6 +3,7 @@ package com.example.scheduler.controller;
 import com.example.scheduler.dto.scheduleDto.ScheduleRequestDto;
 import com.example.scheduler.dto.scheduleDto.ScheduleResponseDto;
 import com.example.scheduler.service.scheduleService.ScheduleService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,8 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto) {
-        return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto, HttpSession session) {
+        return new ResponseEntity<>(scheduleService.saveSchedule(dto,session), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -40,14 +41,13 @@ public class ScheduleController {
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, @RequestBody String password) {
         int resultRow = scheduleService.deleteSchedule(id, password);
         if (resultRow == 0) {
-            System.out.println(resultRow);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDto> updateAuthorAndContents(@PathVariable Long id,@RequestBody ScheduleRequestDto dto){
-        return new ResponseEntity<>(scheduleService.updateAuthorAndContents(id,dto.getPassword(),dto.getAuthor(),dto.getContents()),HttpStatus.OK);
-    }
+//    @PatchMapping("/{id}")
+//    public ResponseEntity<ScheduleResponseDto> updateAuthorAndContents(@PathVariable Long id,@RequestBody ScheduleRequestDto dto){
+//        return new ResponseEntity<>(scheduleService.updateAuthorAndContents(id,dto.getPassword(),dto.getAuthor(),dto.getContents()),HttpStatus.OK);
+//    }
 }

@@ -10,4 +10,6 @@ public interface UserService {
 
 
     void login(UserLoignRequestDto dto, HttpSession session);
+    String getUserName(String userId);
+    void logout(HttpSession session);
 }

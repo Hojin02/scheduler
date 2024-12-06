@@ -4,6 +4,7 @@ import com.example.scheduler.dto.scheduleDto.ScheduleRequestDto;
 import com.example.scheduler.dto.scheduleDto.ScheduleResponseDto;
 import com.example.scheduler.entity.Schedule;
 import com.example.scheduler.repository.scheduleReposittory.ScheduleRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,22 +22,29 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ScheduleResponseDto saveSchedule(ScheduleRequestDto dto) {
-        if (dto.getAuthor() == null || dto.getContents() == null || dto.getPassword() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The author,password,contents are required values.");
+    public ScheduleResponseDto saveSchedule(ScheduleRequestDto dto, HttpSession session) {
+        if (!loginCheck(session)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This service requires login.");
+        }
+        if (dto.getContents() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The author is required value.");
         }
         Schedule schedule = new Schedule(
-                dto.getAuthor(),
-                dto.getPassword(),
-                dto.getContents());
-        return scheduleRepository.saveSchedule(schedule);
+                dto.getAuthorId(),
+                dto.getContents()
+        );
+        String authorName = (String) session.getAttribute("userName");
+        ScheduleResponseDto scheduleResponseDto = scheduleRepository.saveSchedule(schedule);
+        scheduleResponseDto.setAuthor(authorName);
+        return scheduleResponseDto;
     }
 
     @Override
     public List<ScheduleResponseDto> findSchedulesByFilters(String author, String date) {
         List<ScheduleResponseDto> result = scheduleRepository.findSchedulesByFilters(author, date);
         if (result.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "A value that matches the search criteria is empty.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "A value that matches the search criteria is " +
+                    "empty.");
         }
         return result;
     }
@@ -56,10 +64,19 @@ public class ScheduleServiceImpl implements ScheduleService {
         if (password == null || contents == null || author == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The author,password,contents are required");
         }
-        int updateRow = scheduleRepository.updateTitle(id, password,author,contents,LocalDateTime.now());
-        if(updateRow==0){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The input value is invalid and cannot be modified.");
+        int updateRow = scheduleRepository.updateTitle(id, password, author, contents, LocalDateTime.now());
+        if (updateRow == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The input value is invalid and cannot be " +
+                    "modified.");
         }
         return null;
+    }
+
+    @Override
+    public boolean loginCheck(HttpSession session) {
+        if (session.getAttribute("userId") != null) {
+            return true;
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No user login information.");
     }
 }

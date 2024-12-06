@@ -30,7 +30,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The author is required value.");
         }
         Schedule schedule = new Schedule(
-                dto.getAuthorId(),
+                (String) session.getAttribute("userId"),
                 dto.getContents()
         );
         String authorName = (String) session.getAttribute("userName");

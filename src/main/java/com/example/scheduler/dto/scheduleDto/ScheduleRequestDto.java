@@ -7,4 +7,8 @@ import java.time.LocalDateTime;
 public class ScheduleRequestDto {
     private String authorId;
     private String contents; // 할일
+
+    public ScheduleRequestDto(String contents) {
+        this.contents = contents;
+    }
 }

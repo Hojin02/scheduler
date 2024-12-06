@@ -34,9 +34,20 @@ public class UserServiceImpl implements UserService {
     public void login(UserLoignRequestDto dto, HttpSession session) {
         if(userRepository.login(dto)){
             session.setAttribute("userId",dto.getUserId());
+            session.setAttribute("userName",getUserName(dto.getUserId()));
         }else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid username or password");
         }
+    }
+
+    @Override
+    public String getUserName(String userId) {
+        return userRepository.getUserName(userId);
+    }
+
+    @Override
+    public void logout(HttpSession session) {
+        session.invalidate();
     }
 
 

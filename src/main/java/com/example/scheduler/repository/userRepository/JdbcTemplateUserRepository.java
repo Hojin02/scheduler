@@ -6,7 +6,6 @@ import com.example.scheduler.dto.userDto.UserResponseDto;
 import com.example.scheduler.entity.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -54,6 +53,11 @@ public class JdbcTemplateUserRepository implements UserRepository{
         }catch (EmptyResultDataAccessException e){
             return false;
         }
+    }
+
+    @Override
+    public String getUserName(String userId) {
+       return jdbcTemplate.queryForObject("select name from user where id = ? ",new Object[]{userId},String.class);
     }
 
 

@@ -7,10 +7,7 @@ import com.example.scheduler.service.userService.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -29,8 +26,11 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody UserLoignRequestDto dto, HttpSession session) {
         userService.login(dto,session);
-        System.out.println(session.getAttribute("userId"));
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/logout")
+    public void logout(HttpSession session){
+        userService.logout(session);
     }
 
 }

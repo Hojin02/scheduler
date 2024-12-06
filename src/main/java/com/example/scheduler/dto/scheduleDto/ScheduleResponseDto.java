@@ -16,5 +16,6 @@ public class ScheduleResponseDto {
     private String contents; // 할일
     private LocalDateTime createdAt; // 최종수정일
     private LocalDateTime updatedAt; // 최종수정일
+
 }
 

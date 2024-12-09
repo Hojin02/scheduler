@@ -18,17 +18,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping    // 회원가입
     public ResponseEntity<UserResponseDto> registerUser(@RequestBody UserRequestDto dto) {
         return new ResponseEntity<>(userService.registerUser(dto), HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login")  // 로그인
     public ResponseEntity<Void> login(@RequestBody UserLoignRequestDto dto, HttpSession session) {
         userService.login(dto,session);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @GetMapping("/logout")
+    @GetMapping("/logout") //로그이웃
     public void logout(HttpSession session){
         userService.logout(session);
     }

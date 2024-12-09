@@ -20,8 +20,9 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
-    @Override
+    @Override // 회원가입
     public UserResponseDto registerUser(UserRequestDto dto) {
+        // 아이디는 기본키, 이메일은 유니크 키
         if (userRepository.isUserExists("id",dto.getId())) { //이미 데이터가 있을 때
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The ID is already in use.");
         }else if(userRepository.isUserExists("email",dto.getEmail())){
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.registerUser(dto);
     }
 
-    @Override
+    @Override //로그인
     public void login(UserLoignRequestDto dto, HttpSession session) {
         if(userRepository.login(dto)){
             session.setAttribute("userId",dto.getUserId());
@@ -40,12 +41,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
+    @Override // 유저아이디로 해당 유저의 이름 가져오기(세션에 저장하기 위함)
     public String getUserName(String userId) {
         return userRepository.getUserName(userId);
     }
 
-    @Override
+    @Override // 로그아웃
     public void logout(HttpSession session) {
         session.invalidate();
     }

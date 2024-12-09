@@ -20,8 +20,8 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto) {
+    @PostMapping // 새 일정 추가
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto) {//RequestBody에는 contents 파라미터 1개
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
     }
 
@@ -36,12 +36,12 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.findSchedulesByFilters(authorId, updated_at,page-1,pageSize), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")            // 일정 단건 조회
     public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id) {
         return new ResponseEntity<>(scheduleService.findScheduleById(id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") // 일정 삭제
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, @RequestBody UserRequestDto dto) {
         int resultRow = scheduleService.deleteSchedule(id, dto);
         if (resultRow == 0) {

@@ -20,7 +20,7 @@ public class JdbcTemplateUserRepository implements UserRepository{
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    @Override
+    @Override       // 해당 데이터가(아이디,이메일 등) 있는지 확인.
     public boolean isUserExists(String target,String param) {
         String sql = "select 1 from user where "+target+" = ? limit 1";
 
@@ -32,7 +32,7 @@ public class JdbcTemplateUserRepository implements UserRepository{
         }
     }
 
-    @Override
+    @Override   // 유저 회원가입
     public UserResponseDto registerUser(UserRequestDto dto) {
        int resultRow = jdbcTemplate.update("insert into user (id,password,name,email) values (?,?,?,?)",
                 dto.getId(),dto.getPassword(),dto.getName(),dto.getEmail());
@@ -44,7 +44,7 @@ public class JdbcTemplateUserRepository implements UserRepository{
        return null;
     }
 
-    @Override
+    @Override   // 아이디, 비밀번호 DB에 있는지 검사.(로그인)
     public boolean login(UserLoignRequestDto dto) {
         String sql = "select 1 from user where id = ? and password =? limit 1";
         try {
@@ -55,7 +55,7 @@ public class JdbcTemplateUserRepository implements UserRepository{
         }
     }
 
-    @Override
+    @Override   // 유저의 아이디로 해당 유저의 이름 가져옴.
     public String getUserName(String userId) {
        return jdbcTemplate.queryForObject("select name from user where id = ? ",new Object[]{userId},String.class);
     }

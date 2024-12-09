@@ -1,10 +1,7 @@
 package com.example.scheduler.repository.scheduleReposittory;
 
-import com.example.scheduler.dto.scheduleDto.ScheduleRequestDto;
 import com.example.scheduler.dto.scheduleDto.ScheduleResponseDto;
 import com.example.scheduler.entity.Schedule;
-import com.example.scheduler.repository.userRepository.JdbcTemplateUserRepository;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -30,7 +27,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
-        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime date = LocalDateTime.now(); // 현재시간.
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("schedule").usingGeneratedKeyColumns("id");
 
@@ -46,14 +43,14 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
                 date, date);
     }
 
-    @Override
+    @Override                       // 다건 일정 조회(필터링)
     public List<ScheduleResponseDto> findSchedulesByFilters(String authorId, String date) {
         String sql =
                 "SELECT s.id AS id, s.author_id AS author_id, u.name AS author, s.contents AS contents, s.created_at AS created_at, s.updated_at AS updated_at " +
                         "FROM schedule s JOIN user u ON s.author_id = u.id " +
-                        "WHERE 1=1 ";
+                        "WHERE 1=1 "; // 조건문 AND로 붙이기 위해 1=1
 
-        List<Object> params = new ArrayList<>();
+        List<Object> params = new ArrayList<>(); // 조건 파라미터 리스트
 
         if (authorId != null && !authorId.isEmpty()) {
             sql += "and author_id =? ";
@@ -65,12 +62,12 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
             params.add(date);
         }
 
-        sql += "order by updated_at desc";
+        sql += "order by updated_at desc"; // 최신 수정일 기준으로 정렬.
         return jdbcTemplate.query(sql, params.toArray(), scheduleRowMapper());
     }
 
     //
-    @Override
+    @Override                  // 일정id를 이용하여 단건 조회
     public ScheduleResponseDto findScheduleByIdOrElseThrow(Long id) {
         String sql =
                 "SELECT s.id AS id, s.author_id AS author_id, u.name AS author, s.contents AS contents, s.created_at AS created_at, s.updated_at AS updated_at " +
@@ -80,13 +77,13 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return result.stream().findAny().orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Does not exitsts id = "+id));
     }
 
-    @Override
+    @Override   // 일정 삭제
     public int deleteSchedule(Long id) {
         String deleteSql = "delete from schedule where id=?";
         return jdbcTemplate.update(deleteSql,id);
     }
 
-    @Override
+    @Override   // 일정 수정
     public int updateContents(Long id,String contents) {
         return jdbcTemplate.update("update schedule set contents=?,updated_at=NOW() where id=?",contents,id);
     }

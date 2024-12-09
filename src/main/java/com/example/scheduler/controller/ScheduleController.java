@@ -25,7 +25,7 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping  // 일정 목록 조회
     public ResponseEntity<List<ScheduleResponseDto>> findSchedulesByFilters(
             @RequestParam(required = false) String authorId, // Optional 파라미터
             @RequestParam(required = false) String updated_at,   // Optional 파라미터

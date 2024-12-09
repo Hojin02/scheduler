@@ -11,7 +11,7 @@ public class Schedule {
     private Long id; // 고유식별자id
     private String authorId; // 작성자아이디
     private String contents; // 할일
-    private LocalDateTime createdAt; // 최종수정일
+    private LocalDateTime createdAt; // 최종생성일
     private LocalDateTime updatedAt; // 최종수정일
 
     public Schedule(String authorId, String contents) {

@@ -16,5 +16,4 @@ public class ScheduleRequestDto {
     private String contents; // 할일
     private String password;
 
-
 }

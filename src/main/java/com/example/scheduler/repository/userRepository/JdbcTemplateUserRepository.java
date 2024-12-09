@@ -44,7 +44,7 @@ public class JdbcTemplateUserRepository implements UserRepository{
        return null;
     }
 
-    @Override   // 아이디, 비밀번호 DB에 있는지 검사.(로그인)
+    @Override   // 아이디, 비밀번호 DB와 일치하는지 검사.(로그인)
     public boolean login(UserLoignRequestDto dto) {
         String sql = "select 1 from user where id = ? and password =? limit 1";
         try {

@@ -11,7 +11,7 @@ public interface ScheduleService {
     // 일정 추가
     ScheduleResponseDto saveSchedule(ScheduleRequestDto dto);
 
-    List<ScheduleResponseDto> findSchedulesByFilters(String author, String date);
+    List<ScheduleResponseDto> findSchedulesByFilters(String author, String date,int page,int size);
 
     ScheduleResponseDto findScheduleById(Long id);
 

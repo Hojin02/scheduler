@@ -28,9 +28,12 @@ public class ScheduleController {
     @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> findSchedulesByFilters(
             @RequestParam(required = false) String authorId, // Optional 파라미터
-            @RequestParam(required = false) String updated_at   // Optional 파라미터
+            @RequestParam(required = false) String updated_at,   // Optional 파라미터
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int pageSize
+
     ) {
-        return new ResponseEntity<>(scheduleService.findSchedulesByFilters(authorId, updated_at), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.findSchedulesByFilters(authorId, updated_at,page-1,pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

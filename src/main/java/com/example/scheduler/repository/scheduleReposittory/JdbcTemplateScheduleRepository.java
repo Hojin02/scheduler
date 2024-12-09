@@ -1,8 +1,10 @@
 package com.example.scheduler.repository.scheduleReposittory;
 
+import com.example.scheduler.dto.scheduleDto.ScheduleRequestDto;
 import com.example.scheduler.dto.scheduleDto.ScheduleResponseDto;
 import com.example.scheduler.entity.Schedule;
 import com.example.scheduler.repository.userRepository.JdbcTemplateUserRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -70,19 +72,18 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     //
     @Override
     public ScheduleResponseDto findScheduleByIdOrElseThrow(Long id) {
-//        List<ScheduleResponseDto> result=jdbcTemplate.query("select * from schedule where id = ?",scheduleRowMapper
-//        (),id);
-//        return result.stream().findAny().orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Does not
-//        exitsts id = "+id));
-        return null;
+        String sql =
+                "SELECT s.id AS id, s.author_id AS author_id, u.name AS author, s.contents AS contents, s.created_at AS created_at, s.updated_at AS updated_at " +
+                        "FROM schedule s JOIN user u ON s.author_id = u.id " +
+                        "WHERE s.id=?";
+        List<ScheduleResponseDto> result=jdbcTemplate.query(sql,scheduleRowMapper(),id);
+        return result.stream().findAny().orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Does not exitsts id = "+id));
     }
 
     @Override
-    public int deleteSchedule(Long id, String password) {
-//        System.out.println(id);
-//        System.out.println(password);
-//        return jdbcTemplate.update("delete from schedule where id=? and password=?", id,password);
-        return 0;
+    public int deleteSchedule(Long id) {
+        String deleteSql = "delete from schedule where id=?";
+        return jdbcTemplate.update(deleteSql,id);
     }
 
     @Override

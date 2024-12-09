@@ -17,7 +17,10 @@
 ![image](https://github.com/user-attachments/assets/c85e7abe-a9f1-41f8-80ac-0b5a4800799d)
 
 ## ERD
-![image](https://github.com/user-attachments/assets/64954164-d911-4d1e-a58e-61a6eca481b6)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/64954164-d911-4d1e-a58e-61a6eca481b6" width="250" height="450" />
+</p>
+
 
 ## DTO
 ### UserRequestDTO

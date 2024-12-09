@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -48,13 +47,20 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleResponseDto> findSchedulesByFilters(String authorId, String date) {
+    public List<ScheduleResponseDto> findSchedulesByFilters(String authorId, String date, int page, int size) {
         List<ScheduleResponseDto> result = scheduleRepository.findSchedulesByFilters(authorId, date);
         if (result.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "A value that matches the search criteria is " +
                     "empty.");
         }
-        return result;
+        int total = result.size();
+        int start = page * size;
+        if(start>=total){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The range you entered is greater than the range of the data.");
+        }
+        int end = Math.min(start + size, total);
+        List<ScheduleResponseDto> pagingList = result.subList(start,end);
+        return pagingList;
     }
 
     @Override

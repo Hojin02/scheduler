@@ -17,5 +17,5 @@ public interface ScheduleRepository {
 
     int deleteSchedule(Long id);
 
-    int updateTitle(Long id, String password, String author, String contents, LocalDateTime date);
+    int updateContents(Long id,String contents);
 }

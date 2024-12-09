@@ -17,6 +17,7 @@ public interface ScheduleService {
 
     int deleteSchedule(Long id, UserRequestDto dto);
 
-    ScheduleResponseDto updateontents(Long id, String password, String contents);
+    ScheduleResponseDto updateContents(Long id,ScheduleRequestDto dto);
+
     boolean loginCheck(HttpSession session);
 }

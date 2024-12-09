@@ -83,16 +83,28 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ScheduleResponseDto updateontents(Long id, String password, String contents) {
-//        if (password == null || contents == null || author == null) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The author,password,contents are required");
-//        }
-//        int updateRow = scheduleRepository.updateTitle(id, password, author, contents, LocalDateTime.now());
-//        if (updateRow == 0) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The input value is invalid and cannot be " +
-//                    "modified.");
-//        }
-        return null;
+    public ScheduleResponseDto updateContents(Long id, ScheduleRequestDto dto) {
+        if (!loginCheck(session)) {// 로그인 한 상태여야함.
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This service requires login.");
+        }
+        dto.setAuthorId((String) session.getAttribute("userId"));
+        String scheduleAuthorId = scheduleRepository.findScheduleByIdOrElseThrow(id).getAuthorId();
+        String loginedUserId = dto.getAuthorId();
+        if (!scheduleAuthorId.equals(loginedUserId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can only delete your posts");
+        }
+        // 로그인한 사람의 비밀번호와 입력한 비밀번호가 같아야함
+        UserLoignRequestDto userLoignRequestDto = new UserLoignRequestDto(loginedUserId, dto.getPassword());
+        if (!userRepository.login(userLoignRequestDto)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid input. Please check again.");
+        }
+        int updateRow = scheduleRepository.updateContents(id,dto.getContents());
+        if (updateRow == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The input value is invalid and cannot be " +
+                    "modified.");
+        }
+        ScheduleResponseDto responseDto = scheduleRepository.findScheduleByIdOrElseThrow(id);
+        return responseDto;
     }
 
     @Override

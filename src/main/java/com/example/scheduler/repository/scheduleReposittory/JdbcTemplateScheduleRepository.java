@@ -87,10 +87,8 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     }
 
     @Override
-    public int updateTitle(Long id, String password, String author, String contents, LocalDateTime date) {
-//        return jdbcTemplate.update("update schedule set author=?, contents=?,updated_at=? where id=? and
-//       password=? ",author,contents,date,id,password);
-        return 0;
+    public int updateContents(Long id,String contents) {
+        return jdbcTemplate.update("update schedule set contents=?,updated_at=NOW() where id=?",contents,id);
     }
 
     private RowMapper<ScheduleResponseDto> scheduleRowMapper() {

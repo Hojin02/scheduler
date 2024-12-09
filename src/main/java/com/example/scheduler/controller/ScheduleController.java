@@ -49,7 +49,6 @@ public class ScheduleController {
 
     @PatchMapping("/{id}")                                                    // 작성글 id, 수정내용, 유저password
     public ResponseEntity<ScheduleResponseDto> updateAuthorAndContents(@PathVariable Long id,@RequestBody ScheduleRequestDto dto){
-//        return new ResponseEntity<>(scheduleService.updateContents(id,dto.getPassword(),dto.getContents()),HttpStatus.OK);
-        return null;
+        return new ResponseEntity<>(scheduleService.updateContents(id,dto),HttpStatus.OK);
     }
 }

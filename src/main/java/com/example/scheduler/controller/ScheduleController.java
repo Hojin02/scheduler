@@ -2,6 +2,7 @@ package com.example.scheduler.controller;
 
 import com.example.scheduler.dto.scheduleDto.ScheduleRequestDto;
 import com.example.scheduler.dto.scheduleDto.ScheduleResponseDto;
+import com.example.scheduler.dto.userDto.UserRequestDto;
 import com.example.scheduler.service.scheduleService.ScheduleService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,8 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto, HttpSession session) {
-        return new ResponseEntity<>(scheduleService.saveSchedule(dto,session), HttpStatus.CREATED);
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto) {
+        return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -38,16 +39,17 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, @RequestBody String password) {
-        int resultRow = scheduleService.deleteSchedule(id, password);
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, @RequestBody UserRequestDto dto) {
+        int resultRow = scheduleService.deleteSchedule(id, dto);
         if (resultRow == 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<ScheduleResponseDto> updateAuthorAndContents(@PathVariable Long id,@RequestBody ScheduleRequestDto dto){
-//        return new ResponseEntity<>(scheduleService.updateAuthorAndContents(id,dto.getPassword(),dto.getAuthor(),dto.getContents()),HttpStatus.OK);
-//    }
+    @PatchMapping("/{id}")                                                    // 작성글 id, 수정내용, 유저password
+    public ResponseEntity<ScheduleResponseDto> updateAuthorAndContents(@PathVariable Long id,@RequestBody ScheduleRequestDto dto){
+//        return new ResponseEntity<>(scheduleService.updateContents(id,dto.getPassword(),dto.getContents()),HttpStatus.OK);
+        return null;
+    }
 }

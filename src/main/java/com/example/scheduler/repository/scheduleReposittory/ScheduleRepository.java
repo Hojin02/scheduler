@@ -1,5 +1,6 @@
 package com.example.scheduler.repository.scheduleReposittory;
 
+import com.example.scheduler.dto.scheduleDto.ScheduleRequestDto;
 import com.example.scheduler.dto.scheduleDto.ScheduleResponseDto;
 import com.example.scheduler.entity.Schedule;
 
@@ -14,7 +15,7 @@ public interface ScheduleRepository {
 
     ScheduleResponseDto findScheduleByIdOrElseThrow(Long id);
 
-    int deleteSchedule(Long id, String password);
+    int deleteSchedule(Long id);
 
     int updateTitle(Long id, String password, String author, String contents, LocalDateTime date);
 }
